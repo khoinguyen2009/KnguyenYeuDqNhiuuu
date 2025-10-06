@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You — A Love Letter</title>
+  <!-- Add a romantic Google Font that supports Vietnamese, e.g., "Dancing Script" -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap&subset=vietnamese" rel="stylesheet">
+  <style>
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#ff6dad 0%, #ef72a9 50%, #ff78af 100%);
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color:#a8004f;
+    }
+
+    /* Stage */
+    .stage{width:100%;max-width:1100px;padding:40px}
+
+    /* Card */
+    .card{
+      position:relative;
+      background:rgba(255,182,213,0.10);
+      border-radius:24px;
+      padding:40px 48px;
+      box-shadow:0 10px 40px rgba(255,62,142,0.18);
+      backdrop-filter: blur(6px);
+      transform-origin:center;
+      overflow:hidden;
+      border:1px solid rgba(255,182,213,0.18);
+      text-align:center;
+    }
+
+    /* Big title */
+    .title{
+      font-size:clamp(26px,4vw,44px);
+      letter-spacing:1px;
+      margin-bottom:18px;
+      font-weight:700;
+      color:#d9006e;
+    }
+    .subtitle{
+      font-size:clamp(14px,2vw,18px);
+      opacity:0.9;
+      margin-bottom:24px;
+      color:#a8004f;
+    }
+
+    /* Letter area */
+    .letter-wrap {
+      max-height:62vh;
+      overflow:auto;
+      padding-right:8px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+    .letter-wrap::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+    .letter{
+      font-family: 'Dancing Script', cursive, 'Georgia', 'Times New Roman', serif;
+      font-size:clamp(20px, 3vw, 24px);
+      line-height:1.65;
+      text-align:center;
+      padding:8px 8vw 28px 8vw;
+      transform:translateY(6px);
+      color:#a8004f;
+      word-break:break-word;
+    }
+    @media (max-width:600px){
+      .letter{
+        font-size:clamp(16px, 5vw, 20px);
+        padding:8px 4vw 28px 4vw;
+      }
+    }
+    @media (max-width:420px){
+      .card{padding:15px}
+      .letter{font-size: 18px !important;padding:15px 2vw 24px 2vw;}
+    }
+
+    /* Floating hearts */
+    .hearts{position:absolute;inset:0;pointer-events:none}
+    .heart{
+      position:absolute;
+      bottom:-10%;
+      width:26px;
+      height:26px;
+      opacity:0.9;
+      transform:translateY(0) scale(1);
+      animation:rise 8s linear infinite
+    }
+    .heart:before,.heart:after{
+      content:'';
+      position:absolute;
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, #fff3, #ffb6d5 30%, #ff3e8e 80%);
+    }
+    .heart:before{top:-13px;left:0}
+    .heart:after{left:13px;top:0}
+
+    @keyframes rise{
+      0%{opacity:0;transform:translateY(0) scale(0.85)}
+      8%{opacity:1}
+      100%{opacity:0;transform:translateY(-140vh) scale(1.2)}
+    }
+
+    /* Soft entrance animation for the card */
+    .card.enter{animation:popIn 900ms cubic-bezier(.18,.9,.33,1) both}
+    @keyframes popIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+    /* Typewriter reveal (mask) */
+    .letter.revealed{animation:fadeInText 1s ease both}
+    @keyframes fadeInText{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:blur(0)} }
+
+    /* Controls */
+    .controls{display:flex;gap:12px;justify-content:center;margin-top:12px}
+    .btn{
+      background:linear-gradient(180deg, rgba(255,182,213,0.18), rgba(255,62,142,0.10));
+      border:1px solid rgba(255,62,142,0.18);
+      padding:10px 16px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      color:#d9006e;
+      transition:background 0.2s, color 0.2s;
+    }
+    .btn:active{transform:translateY(1px);background:rgba(255,62,142,0.18);color:#a8004f;}
+    .btn#revealBtn {
+      position: relative;
+      background: linear-gradient(90deg, #ff6fae 0%, #ffb6d5 100%);
+      color: #fff;
+      font-size: 1.18em;
+      box-shadow: 0 0 16px 2px #ffb6d5, 0 2px 8px #ff3e8e44;
+      border: none;
+      outline: none;
+      transition: transform 0.18s, box-shadow 0.18s;
+      animation: revealGlow 1.2s infinite alternate;
+      padding: 12px 32px 12px 2.8em;
+      min-width: 150px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .btn#revealBtn::before {
+      content: "❤";
+      position: absolute;
+      left: 1em;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2em;
+      color: #fff;
+      text-shadow: 0 0 8px #ff3e8e88;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .btn#revealBtn {
+        font-size: 1em;
+        padding: 10px 16px 10px 2.2em;
+        min-width: 110px;
+      }
+      .btn#revealBtn::before {
+        left: 0.7em;
+        font-size: 1em;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .btn#revealBtn {
+        font-size: 0.95em;
+        padding: 8px 8px 8px 1.8em;
+        min-width: 80px;
+      }
+      .btn#revealBtn::before {
+        left: 0.5em;
+        font-size: 0.95em;
+      }
+    }
+
+    /* Responsive improvements */
+@media (max-width: 900px) {
+  .stage {
+    padding: 20px;
+    max-width: 98vw;
+  }
+  .card {
+    padding: 24px 12px;
+    max-width: 98vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .stage {
+    padding: 8px;
+    max-width: 100vw;
+  }
+  .card {
+    padding: 12px 2vw;
+    border-radius: 14px;
+    font-size: 15px;
+  }
+  .title {
+    font-size: clamp(20px, 6vw, 32px);
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    font-size: clamp(12px, 4vw, 16px);
+    margin-bottom: 14px;
+  }
+  .letter {
+    font-size: clamp(14px, 5vw, 18px);
+    padding: 8px 2vw 20px 2vw;
+  }
+  .btn#revealBtn {
+    font-size: 1em;
+    padding: 10px 18px 10px 2.2em;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 420px) {
+  .stage {
+    padding: 2px;
+  }
+  .card {
+    padding: 6px 1vw;
+    border-radius: 8px;
+  }
+  .title {
+    font-size: clamp(16px, 7vw, 22px);
+  }
+  .letter {
+    font-size: clamp(12px, 7vw, 15px);
+    padding: 6px 1vw 12px 1vw;
+  }
+  .btn#revealBtn {
+    font-size: 0.95em;
+    padding: 8px 10px 8px 1.8em;
+    min-width: 90px;
+  }
+}
+
+/* ...existing code... */
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" ></audio>
+  <div class="stage">
+    <div class="card" id="card">
+      <div class="title">Dành cho nàng công chúa đang giữ trái tim tui💖</div>
+      <!-- <div class="subtitle">Tình c</div> -->
+
+      <div class="letter-wrap">
+        <div class="letter" id="letter"></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="revealBtn">Mở thư</button>
+      </div>
+
+      <div class="hearts" id="hearts"></div>
+    </div>
+  </div>
+
+  <script>
+    // --- The letter text: edit this string to customise the content. ---
+    const letterText = `Hé nhô Dq nho, Knguyen nò, em bé của Dq đây nò:))). Hôm nay là ngày 9/1/2025, ngày kỉ niệm 2 tháng tụi mình bên cạnh nhau, yêu thương quan tâm và chăm sóc cho nhau, Trong suốt những ngày tháng được ở bên Dq, Knguyen cảm thấy vô cùng hạnh phúc💖. Dù trong ngày tháng qua đã có những chuyện không được vui đến với Knguyen, em cũng đã buồn nhiều:(( nhưng mà nhờ có Dq luôn ở bên Knguyen nên Knguyen cảm thấy được an ủi rất nhiều, Knguyen cảm ơn Dq nhiều lắm. Dq ơi, em muốn nói là em yêu Dq nhiều lắm ó, thật sự là nhiều vô cùng luôn. Nhiều lúc Dq hỏi em “E có chán chị hg”  hay là “Chị sợ e chán”, em muốn nói là em thật sự chưa từng thấy chán gì hết ó, em thật lòng yêu Dq rất nhiều, nhớ Dq rất nhiều, hầu như đêm nào em cũng mơ thấy chị hết, bây giờ em thấy em còn yêu chị nhiều x10000000 lần lúc đầu nữa, thiệt sự lun mò. Em rất trân trọng tình cảm mà Dq dành cho em và em hong bao giờ muốn mất nó đâu:(( Huhuhu, Dq ơi có thấy Knguyen có tồi hong:(( chứ nhiều lúc em cảm thấy bản thân mình tồi lắm ý, đã khờ rùi còn hong được tinh tế nhiều lúc làm Dq buồn nữa … Nhưng mò em luôn cố gắng thay đổi để hong làm Dq buồn, để xứng đáng làm chàng trai của Dq nò hehe. Đây là lá thư thứ 2 em viết cho Dq ó, phải nói là em cũng khá là thích viết thư như này luôn á hihi, hi vọng là em sẽ được viết thư cho Dq như vậy quài lunnnn... Knguyen hứa là em sẽ luôn nhẹ nhàng và luôn lắng nghe Dq trong mọi hoàn cảnh, nếu Dq có chuyện gì buồn hay nghi ngờ gì thì Dq hãy nói với Knguyen nhe, Knguyen hiểu cho Dq mò, nhiều lúc Dq cứ im lặng Knguyen cũng thấy buồn lắm ý:((  Mà Knguyen đã thề với Dq òi đó, Knguyen sẽ luôn yêu thương Dq như vậy và chắc chắn là mãi mãi như vậy luôn. Vậy là hết thư ùi đó, có thể là em viết hong được hay cho lắm nhưng mà nó chứa đựng rất là nhiều tình cảm của em lun ó, hy vọng Dq sẽ hong có chê nha. Qua năm mới Knguyen muốn chúc cho Dq luôn xinh đẹp luôn hạnh phúc, học giỏi và mãi mãi là của Knguyen nhee hihihi. Knguyen muốn nói là Knguyen yêu Dq rất nhiều, nhiều s1tg lun, tình cảm thật lòng của em từ trong trái tim lun ó💖 và Knguyen cũm muốn cảm ơn Dq vì tất cả những điều tuyệt vời mà Dq đã mang đến cho Knguyen.`;
+
+    // Insert text into DOM but keep hidden for the reveal animation
+    const letterEl = document.getElementById('letter');
+    // Break the letter into paragraphs
+    const paragraphs = letterText.split('\n\n').map(p => p.replace(/^\s+|\s+$/g, ''));
+    paragraphs.forEach(p => {
+      const pEl = document.createElement('p');
+      pEl.textContent = p;
+      letterEl.appendChild(pEl);
+    });
+
+    // Entrance animation
+    const card = document.getElementById('card');
+    setTimeout(()=>card.classList.add('enter'),50);
+
+    // Generate floating hearts
+    const heartsContainer = document.getElementById('hearts');
+    function makeHeart(){
+      const h = document.createElement('div');
+      h.className = 'heart';
+      // random horizontal position
+      h.style.left = Math.random()*100 + '%';
+      // random size
+      const size = 14 + Math.random()*36;
+      h.style.width = size + 'px';
+      h.style.height = size + 'px';
+      h.style.opacity = (0.6 + Math.random()*0.4).toFixed(2);
+      // random animation duration and delay
+      const dur = 6 + Math.random()*8;
+      h.style.animationDuration = dur + 's';
+      h.style.animationDelay = (Math.random()*-4) + 's';
+      heartsContainer.appendChild(h);
+      // remove after animation to keep DOM tidy
+      setTimeout(()=>h.remove(), (dur+2)*1000);
+    }
+    // spawn hearts periodically
+    setInterval(makeHeart, 700);
+
+    // Background music setup
+    const audio = document.getElementById("bgMusic");
+
+    // Add all your songs here 👇
+    const playlist = [
+      "C:\Users\IIISI\Downloads\LOVE LETTER\Project 1\Em ơi sau này.mp3",
+      "C:\Users\IIISI\Downloads\LOVE LETTER\Project 1\Nếu những tiếc nuối.mp3",
+    ];
+
+    let current = 0;
+
+    // Load and play the first song
+    function playTrack(index) {
+      audio.src = playlist[index];
+      audio.volume = 0.6;     // set your desired volume
+      audio.currentTime = 0;  // start at beginning
+      audio.play();
+    }
+
+    // When a song ends, go to the next
+    audio.addEventListener("ended", () => {
+      current++;
+      if (current < playlist.length) {
+        playTrack(current);
+      } else {
+        // Optional: loop back to start
+        current = 0;
+        playTrack(current);
+      }
+    });
+
+
+
+    // Smooth reveal (gradual fade + slight typewriter pacing)
+    const revealBtn = document.getElementById('revealBtn');
+    revealBtn.addEventListener('click', ()=>{
+      revealBtn.disabled = true;
+      // reveal with gentle fade and small delays per paragraph
+      const paras = Array.from(letterEl.querySelectorAll('p'));
+      let idx = 0;
+      letterEl.style.opacity = '1';
+      function showNext(){
+        if(idx>=paras.length){
+          letterEl.classList.add('revealed');
+          revealBtn.disabled = false;
+          return;
+        }
+        const p = paras[idx];
+        p.style.opacity = '0';
+        p.style.transform = 'translateY(6px)';
+        p.style.transition = 'opacity 480ms ease, transform 480ms ease';
+        // small timeout to allow CSS to apply
+        requestAnimationFrame(()=>{
+          p.style.opacity = '1';
+          p.style.transform = 'translateY(0)';
+        });
+        idx++;
+        setTimeout(showNext, 420 + Math.random()*220);
+      }
+
+      // Play music when revealed
+      playTrack(0);
+
+    
+
+      showNext();
+    });
+
+    // start with hidden paragraphs (so reveal works)
+    (function hideParas(){
+      const paras = Array.from(letterEl.querySelectorAll('p'));
+      paras.forEach(p=>{p.style.opacity='0';p.style.transform='translateY(6px)'});
+    })();
+  </script>
+</body>
+</html>
